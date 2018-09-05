@@ -1,0 +1,33 @@
+namespace: name-of-app
+
+resources:
+  - aws-lambda:
+    	handler: path/to/handler
+    	configurations:
+      	name: aws-lambda
+      	runtime: nodejs6.10
+      	events:
+        	- http:
+            	path: users/create
+            	method: get
+        	- s3: name-of-bucket
+          - schedule: rate(10 minutes)
+          - sns: greeter-topic
+          - stream: arn:aws:dynamodb:region:XXXXXX:table/foo/stream/1970-01-01T00:00:00.000
+          - alexa-skill: amzn1.ask.skill.xx-xx-xx-xx
+          - alexa-smart-home: amzn1.ask.skill.xx-xx-xx-xx
+          - iot:
+              sql: "SELECT * FROM 'some_topic'"
+          - cloud-watch-event:
+              event:
+                source:
+                  - "aws.ec2"
+                detail-type:
+                  - "EC2 Instance State-change Notification"
+                detail:
+                  state:
+                    - pending
+          - cloud-watch-log: "/aws/lambda/hello"
+          - cognito-user-pool:
+              pool: MyUserPool
+              trigger: PreSignUp
