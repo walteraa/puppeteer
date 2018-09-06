@@ -1,0 +1,38 @@
+apiVersion: components/v1beta1
+kind: EventTrigger
+metadata:
+  name: event-map-name
+  #Any other we want, it would be used to our infrastructure or normalization if needed
+spec:
+  events:
+    - name: event1 #Referring to aws S3
+      service: Storage
+      type: UPLOAD
+      bucket-name: my-bucket
+      cloud-provider: aws
+    - name: event2 #Referring to Azure CosmusDB
+      service: Database
+      type: INSERT
+      table: database_name.table_name #Check if would be better split it into two other
+      cloud-provider: Azure
+    - name: event3 #referring to Google Cloud Pub/Sub
+      service: pub-sub
+      topic: topic_name
+      cloud-provider: gce
+  triggers:
+    - name: trigger1 #It trigger all events above
+      script: path/to/script1.js
+      cloud-provider: Azure
+    - name: trigger2 #It trigger only events above which aren't blacklisted
+      script: path/to/script2.js
+      black-list:
+        - name: event2
+      cloud-provider: aws
+    - name: trigger3 #It treiggers only events which are in the whitelist
+      script: path/to/script3.js
+      white-list:
+        - name: event3
+        - name: event2
+      cloud-provider: gce
+
+
